@@ -1,0 +1,84 @@
+{
+    "name": "vscode-qiniu-uploader",
+    "displayName": "vscode-qiniu-uploader",
+    "description": "Upload files or images to QiNiu",
+    "version": "0.0.1",
+    "publisher": "vscode-qiniu-uploader",
+    "engines": {
+        "vscode": "^1.17.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:qiniu-uploader.uploadFromFile",
+        "onCommand:qiniu-uploader.uploadFromClipboard"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [{
+                "command": "qiniu-uploader.uploadFromFile",
+                "title": "Upload from file"
+            },
+            {
+                "command": "qiniu-uploader.uploadFromClipboard",
+                "title": "Upload from clipboard(image only)"
+            }
+        ],
+        "configuration": {
+            "title": "Qiniu Uploader Configuration",
+            "properties": {
+                "qiniu-uploader.ak": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Qiniu Cloud Access Key"
+                },
+                "qiniu-uploader.sk": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Qiniu Cloud Secret Key"
+                },
+                "qiniu-uploader.bucket": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Qiniu Cloud Bucket Name"
+                },
+                "qiniu-uploader.fileKeyPattern": {
+                    "type": "string",
+                    "default": "${fileName}.${fileExt}",
+                    "description": "File key in Qiniu Cloud. Supported placeholder are :\n${fileName}(current opened file name)\n${fileExt}(current opened file extension)\n${year}\n${month}\n${day}\n${hour}\n${minute}\n${second}\n${time}\n${input}(Input from a textbox)"
+                },
+                "qiniu-uploader.domain": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Qiniu Cloud Bucket domain, must be a url and ends with '/'"
+                },
+                "qiniu-uploader.saveToLocal": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Set whether save image to local when upload from clipboard, if true must set qiniu-uploader.localPath"
+                },
+                "qiniu-uploader.localPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Local path to save clipboard image. Relative to the current opening folder or absolute path."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42",
+        "qiniu": "^7.1.0",
+        "mkdir-recursive": "^0.4.0"
+    }
+}
