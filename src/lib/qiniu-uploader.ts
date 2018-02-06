@@ -30,11 +30,18 @@ export class QiNiuUploader implements Disposable {
             this.uploader.putFile(this.makeUploadToken(), key, file, putExtra,
                 (respErr, respBody, respInfo) => {
                     if (respErr) {
-                        return resolve(new UploadResponse(false,
-                            null, respErr.toString()));
+                        return resolve({
+                            success: false,
+                            localFile: file,
+                            error: respErr.toString()
+                        });
                     }
 
-                    let r = new UploadResponse(false, respInfo.statusCode, file);
+                    const r: UploadResponse = {
+                        success: false,
+                        statusCode: respInfo.statusCode,
+                        localFile: file
+                    };
 
                     switch (respInfo.statusCode) {
                         case 200:
@@ -68,22 +75,11 @@ export class QiNiuUploader implements Disposable {
     }
 }
 
-export class UploadResponse {
-
-    public constructor(success: boolean, statusCode: number,
-        localFile: string, error?: string, key?: string, hash?: string) {
-        this.success = success;
-        this.statusCode = statusCode;
-        this.localFile = localFile;
-        this.error = error;
-        this.key = key;
-        this.hash = hash;
-    }
-
+export interface UploadResponse {
     success: boolean;
-    statusCode: number;
+    statusCode?: number;
     localFile: string;
-    key: string;
-    hash: string;
-    error: string;
+    key?: string;
+    hash?: string;
+    error?: string;
 }
